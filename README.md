@@ -13,8 +13,8 @@ AI 时代的 Neovim 配置 + 一键安装器，面向大型 **C/C++ 代码库**�
 
 ```sh
 cd ~/tmp/ainvim
-./install.sh          # 在线优先
-./install.sh --offline # 使用仓库内 vendor 离线包
+./install.sh              # 启动时会询问是否离线
+./install.sh --offline-bundle /path/ainvim-offline-*.tar.gz
 ```
 
 安装完成后：
@@ -27,18 +27,31 @@ aivim
 
 ## 安装器会做什么
 
-| 依赖 | 在线 | 离线 |
+| 依赖 | 在线 | 离线(外部包) |
 |---|---|---|
-| Neovim | 系统版本够就用；否则官方 0.11.5；glibc 不兼容时源码编译 | `vendor/nvim-linux-x86_64.tar.gz` |
-| LazyVim + 插件 | `lazy.nvim` 按 `lazy-lock.json` 安装 | `vendor/lazy.tar.gz` |
-| GNU GLOBAL | 系统包 `global`；否则源码编译 | `vendor/global-6.6.4.tar.gz` |
-| Node.js/npm | 系统 >=18；否则 Node 22 | `vendor/node-v22.23.5-linux-x64.tar.xz` |
+| Neovim | 系统版本够就用；否则官方 0.11.5；glibc 不兼容时源码编译 | 由离线包提供 |
+| LazyVim + 插件 | `lazy.nvim` 按 `lazy-lock.json` 安装 | 由离线包提供 |
+| GNU GLOBAL | 系统包 `global`；否则源码编译 | 由离线包提供 |
+| Node.js/npm | 系统 >=18；否则 Node 22 | 由离线包提供 |
 | Claude Code / Codex / ACP | npm / 官方安装器 | 不在包内，脚本说明 |
-| tree-sitter | 包内或在线 | `vendor/tree-sitter` + `vendor/parser` |
+| tree-sitter | 在线 | 由离线包提供 |
 | MCP | 注册 `aivim-gtags` | 同左 |
 | tmux 滚轮 | 追加透传配置 | 同左 |
 
 系统基础工具（Python、git、tar、gzip、curl、gcc、make、xz）在线时由包管理器安装，离线时需预装。
+
+### 离线安装
+
+仓库不包含大文件。离线包单独获取：
+
+```sh
+# 方式 1:从 GitHub Releases 下载
+#   https://github.com/kunlilin2991/ainvim/releases
+# 方式 2:在联网机器安装后生成
+./scripts/make-offline-bundle.sh
+# 然后把 ainvim-offline-*.tar.gz 拷到目标机器
+./install.sh --offline-bundle /path/to/ainvim-offline.tar.gz
+```
 
 ## 目录
 
@@ -50,7 +63,6 @@ nvim-ai/                   完整 Neovim 配置
   tools/aicx.py            索引器 + MCP server
   scripts/check.lua        按键/选项审计
 bin/aivim                  启动器
-vendor/                    离线包
 tmux/nvim-ai-mouse.conf    tmux 滚轮透传
 scripts/push-github.sh     安全推送脚本
 REQUIREMENTS.md            需求与设计

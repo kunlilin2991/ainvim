@@ -4,7 +4,8 @@
 # 用法:
 #   ./install.sh                 # 自动检测网络,在线优先,失败回退离线
 #   ./install.sh --online        # 强制联网安装(插件/GLOBAL/Node 等)
-#   ./install.sh --offline       # 强制离线(使用包内 vendor;跳过 npm ACP)
+#   ./install.sh --offline       # 强制离线(需 --offline-bundle 或本地 vendor/)
+#   ./install.sh --offline-bundle PATH  # 使用下载好的离线包
 #   ./install.sh --no-ai         # 不装 Claude/Codex/ACP
 #   ./install.sh --no-mcp        # 不改 Claude/Codex MCP 配置
 #   ./install.sh --no-plugins    # 只装配置/依赖,不装 Neovim 插件
@@ -34,6 +35,7 @@ NO_PLUGINS=0
 NO_TMUX=0
 SKIP_DEPS=0
 INDEX_PATH=""
+OFFLINE_BUNDLE=""
 PYTHON=""
 NVIM=""
 NODE_OK=0
@@ -47,7 +49,8 @@ nvim-ai 一键安装脚本
 用法:
   ./install.sh                 # 自动检测网络,在线优先,失败回退离线
   ./install.sh --online        # 强制联网安装(插件/GLOBAL/Node 等)
-  ./install.sh --offline       # 强制离线(使用包内 vendor;跳过 npm ACP)
+  ./install.sh --offline       # 强制离线(需 --offline-bundle 或本地 vendor/)
+  ./install.sh --offline-bundle PATH  # 使用下载好的离线包
   ./install.sh --no-ai         # 不装 Claude/Codex/ACP
   ./install.sh --no-mcp        # 不改 Claude/Codex MCP 配置
   ./install.sh --no-plugins    # 只装配置/依赖,不装 Neovim 插件
@@ -68,6 +71,7 @@ while [ $# -gt 0 ]; do
     --no-plugins) NO_PLUGINS=1 ;;
     --no-tmux) NO_TMUX=1 ;;
     --skip-deps) SKIP_DEPS=1 ;;
+    --offline-bundle) OFFLINE_BUNDLE="${2:?--offline-bundle 需要路径}"; shift ;;
     --index) INDEX_PATH="${2:?--index 需要路径}"; shift ;;
     -h|--help) usage; exit 0 ;;
     *) echo "unknown option: $1"; usage; exit 2 ;;
@@ -150,6 +154,10 @@ EOF
 
 TMPDIR=$(mktemp -d "${TMPDIR:-/tmp}/nvim-ai-install.XXXXXX")
 trap 'rm -rf "$TMPDIR"' EXIT
+if [ ! -d "$VENDOR" ]; then
+  VENDOR="$TMPDIR/vendor"
+  mkdir -p "$VENDOR"
+fi
 
 OS=$(uname -s)
 ARCH=$(uname -m)
@@ -209,8 +217,82 @@ pm_install() {
 }
 echo "  package manager: ${PM:-none}  sudo: ${SUDO:-no}"
 
+# ── 离线包 ─────────────────────────────────────────────────────
+offline_help() {
+  cat <<'EOF'
+离线安装需要单独的离线包(仓库不包含大文件):
+  1. 在联网机器打开:
+       https://github.com/kunlilin2991/ainvim/releases
+     下载 ainvim-offline-*.tar.gz
+     (或向维护者获取;包内应有 vendor/ 目录)
+  2. 拷贝到本机
+  3. ./install.sh --offline-bundle /path/to/ainvim-offline.tar.gz
+离线包内容: vendor/ 下的 Neovim、Node、GNU GLOBAL、LazyVim/插件、tree-sitter/解析器。
+EOF
+}
+
+extract_offline_bundle() {
+  local bundle="$1"
+  if [ ! -f "$bundle" ]; then
+    echo "  找不到离线包: $bundle"
+    return 1
+  fi
+  echo "  使用离线包: $bundle"
+  if [ "$DRY_RUN" = 1 ]; then
+    VENDOR="$TMPDIR/offline/vendor"
+    OFFLINE=1; NET=0; NO_AI=1
+    return 0
+  fi
+  mkdir -p "$TMPDIR/offline"
+  if ! tar -xzf "$bundle" -C "$TMPDIR/offline"; then
+    echo "  解压离线包失败"
+    return 1
+  fi
+  local v
+  v=$(find "$TMPDIR/offline" -maxdepth 3 -type d -name vendor | head -1)
+  if [ -z "$v" ]; then
+    echo "  离线包内没有 vendor/ 目录"
+    return 1
+  fi
+  VENDOR="$v"
+  OFFLINE=1; NET=0; NO_AI=1
+  echo "  vendor: $VENDOR"
+}
+
+ask_offline_mode() {
+  if [ -n "$OFFLINE_BUNDLE" ]; then
+    extract_offline_bundle "$OFFLINE_BUNDLE" || { offline_help; exit 1; }
+    return
+  fi
+  if [ "$OFFLINE" = 1 ]; then
+    if [ -d "$BUNDLE_DIR/vendor" ]; then
+      VENDOR="$BUNDLE_DIR/vendor"
+      echo "  离线模式: 使用本地 vendor ($VENDOR)"
+    else
+      offline_help
+      exit 1
+    fi
+    return
+  fi
+  if [ "$FORCE_ONLINE" = 1 ] || [ ! -t 0 ]; then
+    return
+  fi
+  printf '是否在离线环境安装? [y/N]: '
+  local ans=""
+  read -r ans || ans=""
+  case "$ans" in
+    y|Y|yes|YES)
+      printf '离线包路径 [./ainvim-offline.tar.gz]: '
+      local path=""
+      read -r path || path=""
+      [ -n "$path" ] || path="./ainvim-offline.tar.gz"
+      extract_offline_bundle "$path" || { offline_help; exit 1; }
+      ;;
+  esac
+}
+
 # ── 网络检测 ────────────────────────────────────────────────────
-if [ "$OFFLINE" = 1 ]; then
+if [ "$OFFLINE" = 1 ] || [ -n "$OFFLINE_BUNDLE" ]; then
   NET=0
 elif [ "$FORCE_ONLINE" = 1 ]; then
   NET=1
@@ -224,6 +306,7 @@ else
   NET=0
 fi
 echo "  network: $([ "$NET" = 1 ] && echo online || echo offline)"
+ask_offline_mode
 
 if [ "$OFFLINE" = 1 ]; then
   echo "  离线模式: 跳过 npm ACP adapters"

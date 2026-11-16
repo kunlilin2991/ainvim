@@ -61,10 +61,10 @@
 
 - 一键脚本：`install.sh`。
 - **在线优先**：安装系统基础工具、Neovim、GNU GLOBAL、Node、LazyVim/插件、AI CLI/ACP、tree-sitter、MCP、tmux。
-- **离线兜底**：`vendor/` 内含 Neovim 二进制、Node、GNU GLOBAL 源码、LazyVim+插件、tree-sitter+解析器。
+- **离线兜底**：仓库不提交大文件；离线时通过 `--offline-bundle` 使用单独下载/生成的离线包（内含 Neovim、Node、GNU GLOBAL、LazyVim+插件、tree-sitter+解析器）。
 - 离线限制：
   - 系统基础工具（Python/git/tar/gzip/curl/gcc/make/xz）需预装；
-  - Claude Code / Codex / ACP adapters 不在包内，脚本会说明；
+  - Claude Code / Codex / ACP adapters 不在离线包内，脚本会说明；
   - 旧 glibc 上官方 Neovim 二进制不兼容且无法编译时，脚本会明确提示。
 
 ## 7. 非目标

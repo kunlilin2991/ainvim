@@ -1,9 +1,5 @@
-ainvim repository
-date: 2026-11-16T16:04:32+08:00
+ainvim repository (online installer)
+date: 2026-11-16T16:24:55+08:00
 config_version: VERSION = "2026-11-16.4"
-neovim: NVIM v0.11.5
-tree-sitter parts: 2
-plugins_parts: 6
-node_parts: 2
-parsers: 26
 config_files: 26
+offline: separate ainvim-offline-*.tar.gz via --offline-bundle

@@ -12,7 +12,7 @@ chmod +x install.sh
 
 默认行为：
 
-- 使用包内 `vendor/lazy.tar.gz` 安装全部插件（离线）
+- 离线时使用 `--offline-bundle` 指定的外部离线包
 - 复制配置到 `~/.config/nvim-ai`
 - 安装启动器 `~/.local/bin/aivim`
 - 安装 `~/.local/bin/tree-sitter` 和 C/C++ 等解析器
@@ -29,16 +29,16 @@ chmod +x install.sh
 
 | 依赖 | 在线 | 离线(`--offline`) |
 |---|---|---|
-| Neovim | 系统版本够就用；否则下载官方 0.11.5 到 `~/.local/opt/nvim`；官方二进制与 glibc 不兼容时自动源码编译 | 使用 `vendor/nvim-linux-x86_64.tar.gz`；旧 glibc 不兼容时无法编译，会明确提示 |
-| GNU GLOBAL | 优先系统包 `global`；否则源码编译 6.6.4 到 `~/.local/opt/global` | 使用 `vendor/global-6.6.4.tar.gz` 源码编译（需要 gcc/make） |
-| Node.js/npm | 系统 >=18 就用；否则下载 Node 22 到 `~/.local/opt/node` | 使用 `vendor/node-v22.23.5-linux-x64.tar.xz` |
+| Neovim | 系统版本够就用；否则下载官方 0.11.5 到 `~/.local/opt/nvim`；官方二进制与 glibc 不兼容时自动源码编译 | 由 `--offline-bundle` 提供；旧 glibc 不兼容时无法编译，会明确提示 |
+| GNU GLOBAL | 优先系统包 `global`；否则源码编译 6.6.4 到 `~/.local/opt/global` | 由离线包提供源码，编译需要 gcc/make |
+| Node.js/npm | 系统 >=18 就用；否则下载 Node 22 到 `~/.local/opt/node` | 由离线包提供 |
 | git/tar/gzip/curl/gcc/make/xz | 包管理器安装 | **不在包内**，需要系统预装 |
 | Python >=3.8 | 包管理器安装 | **不在包内**，需要系统预装 |
 | Claude Code | `npm i -g @anthropic-ai/claude-code` 或官方安装器 | **不在包内**（约 346MB 且需登录），会说明 |
 | Codex CLI | `npm i -g @openai/codex` | **不在包内**，会说明 |
 | ACP adapters | npm 在线安装 | **不在包内**，会说明 |
-| Neovim 插件 | `Lazy! sync` + `Lazy! restore`；失败回退 vendor | 使用 `vendor/lazy.tar.gz` |
-| tree-sitter/解析器 | 包内优先；其他架构在线 | 使用包内 `vendor/tree-sitter` + `vendor/parser` |
+| Neovim 插件 | `Lazy! sync` + `Lazy! restore` | 由离线包提供 |
+| tree-sitter/解析器 | 在线安装 | 由离线包提供 |
 
 说明：
 
