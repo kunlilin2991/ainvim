@@ -1,0 +1,4 @@
+#!/bin/sh
+export NVIM_APPNAME=nvim-ai
+export PATH="$HOME/.local/bin:$PATH"
+exec nvim "$@"

@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.DS_Store
+ainvim-bundle-*.tar.gz
+nvim-ai-bundle-*.tar.gz
+vendor/lazy.tar.gz
+vendor/node-v22.23.5-linux-x64.tar.xz
+vendor/tree-sitter
