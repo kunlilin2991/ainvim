@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # nvim-ai 一键安装脚本
-# 在线优先:能联网就从官方源安装;失败/离线时使用包内 vendor 兜底。
+# 在线优先:能联网就从官方源安装;离线时使用 --offline-bundle 指定的外部离线包。
 # 用法:
 #   ./install.sh                 # 自动检测网络,在线优先,失败回退离线
 #   ./install.sh --online        # 强制联网安装(插件/GLOBAL/Node 等)
-#   ./install.sh --offline       # 强制离线(需 --offline-bundle 或本地 vendor/)
+#   ./install.sh --offline       # 强制离线(需 --offline-bundle)
 #   ./install.sh --offline-bundle PATH  # 使用下载好的离线包
 #   ./install.sh --no-ai         # 不装 Claude/Codex/ACP
 #   ./install.sh --no-mcp        # 不改 Claude/Codex MCP 配置
@@ -49,7 +49,7 @@ nvim-ai 一键安装脚本
 用法:
   ./install.sh                 # 自动检测网络,在线优先,失败回退离线
   ./install.sh --online        # 强制联网安装(插件/GLOBAL/Node 等)
-  ./install.sh --offline       # 强制离线(需 --offline-bundle 或本地 vendor/)
+  ./install.sh --offline       # 强制离线(需 --offline-bundle)
   ./install.sh --offline-bundle PATH  # 使用下载好的离线包
   ./install.sh --no-ai         # 不装 Claude/Codex/ACP
   ./install.sh --no-mcp        # 不改 Claude/Codex MCP 配置
