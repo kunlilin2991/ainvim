@@ -114,27 +114,51 @@ codex mcp list     # aivim-gtags enabled
 ## 包内容
 
 ```
-install.sh                 一键安装
-nvim-ai/                   完整配置源码
+install.sh                 一键安装器(在线优先,离线询问)
+nvim-ai/                   完整配置源码(按键/AI/GLOBAL 定制)
 bin/aivim                  启动器
-vendor/tree-sitter.part-*  Linux x86_64 tree-sitter 0.22.6(分片)
-vendor/parser/*.so         C/C++/Lua/Vim 等预编译解析器
-vendor/lazy.tar.gz.part-* 全部 Neovim 插件(含 lazy.nvim,分片存储; install.sh 自动拼接)
-vendor/nvim-linux-x86_64.tar.gz   Neovim 0.11.5 官方二进制(离线兜底)
-vendor/node-v22.23.5-linux-x64.tar.xz.part-*  Node.js 22(分片; install.sh 自动拼接)
-vendor/global-6.6.4.tar.gz GNU GLOBAL 源码(离线编译)
-README-INSTALL.md          本文件
-MANIFEST.txt               版本/内容清单
+tmux/nvim-ai-mouse.conf    tmux 滚轮透传
+scripts/check.lua          按键/选项审计
+scripts/push-github.sh     SSH 推送脚本
+scripts/ssh-proxy.py       直连 SSH 被阻断时的代理隧道辅助
+scripts/make-offline-bundle.sh  在联网机器生成离线包
+README.md / REQUIREMENTS.md / README-INSTALL.md
+MANIFEST.txt / SHA256SUMS
 ```
+
+## 离线包(单独分发,不提交仓库)
+
+离线安装需要一个单独的 `ainvim-offline-*.tar.gz`，格式是包内包含 `vendor/` 目录：
+
+- Neovim 二进制、Node.js、GNU GLOBAL 源码
+- LazyVim + 全部插件
+- tree-sitter + 预编译解析器
+
+获取方式：
+
+```sh
+# 1) 从 GitHub Releases 下载(发布页提供时)
+#    https://github.com/kunlilin2991/ainvim/releases
+# 2) 在联网机器安装后生成
+./scripts/make-offline-bundle.sh
+```
+
+使用：
+
+```sh
+./install.sh --offline-bundle /path/to/ainvim-offline.tar.gz
+```
+
+大文件可能在离线包内拆成 `.part-*`，安装器会自动拼接。
 
 ## 兼容性说明
 
-- `vendor/tree-sitter` 和 `vendor/parser/*.so` 是 **Linux x86_64**、在本机 glibc 2.31 上构建的。
+- 离线包内的 `tree-sitter` 和 `parser/*.so` 是 **Linux x86_64**、在 glibc 2.31 上构建的。
   - 其他机器同架构且 glibc >= 2.31: 可用。
   - ARM/其他系统: 安装脚本自动改为在线安装/用 cargo 编译。
 - 解析器 ABI 与 Neovim 版本相关；如果目标机器 Neovim 版本差异较大，脚本会提示，你也可以在 Neovim 里运行 `:TSUpdate`。
 - `~/.cache/tags` 等旧缓存不会被复制或删除；新索引缓存在 `~/.cache/nvim-ai`，需要在新机器上重建。
-- 包内不包含任何 API key、Claude/Codex 登录信息、`.claude.json`、`~/.codex/config.toml`。
+- 仓库和离线包都不包含 API key、Claude/Codex 登录信息、`.claude.json`、`~/.codex/config.toml`。
 
 ## 卸载
 

@@ -1,5 +1,5 @@
 ainvim repository (online installer)
-date: 2026-11-16T16:26:25+08:00
+date: 2026-11-16T16:27:20+08:00
 config_version: VERSION = "2026-11-16.4"
 config_files: 26
 offline: separate ainvim-offline-*.tar.gz via --offline-bundle
