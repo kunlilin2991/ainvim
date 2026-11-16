@@ -18,6 +18,7 @@ set -euo pipefail
 BUNDLE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 CONFIG_SRC="$BUNDLE_DIR/nvim-ai"
 BIN_SRC="$BUNDLE_DIR/bin/aivim"
+NVIM_SRC="$BUNDLE_DIR/bin/nvim"
 VENDOR="$BUNDLE_DIR/vendor"
 
 CONFIG_DIR="${HOME}/.config/nvim-ai"
@@ -440,13 +441,13 @@ if [ -z "$NVIM" ]; then
     nbin=$(find "$HOME/.local/opt/nvim" -maxdepth 4 -type f -name nvim | head -1)
     if [ -n "$nbin" ]; then
       run mkdir -p "$BIN_DIR"
-      run ln -sfn "$nbin" "$BIN_DIR/nvim"
-      NVIM="$BIN_DIR/nvim"
+      run ln -sfn "$nbin" "$BIN_DIR/nvim-real"
+      NVIM="$BIN_DIR/nvim-real"
       if "$NVIM" --version >/dev/null 2>&1; then
         echo "  已安装: $("$NVIM" --version | head -1)"
       else
         echo "  官方二进制与当前 glibc 不兼容,改为源码编译 ..."
-        run rm -f "$BIN_DIR/nvim"
+        run rm -f "$BIN_DIR/nvim-real"
         NVIM=""
       fi
     fi
@@ -470,8 +471,8 @@ if [ -z "$NVIM" ] && [ "$NET" = 1 ] && have git && have make; then
       if run make -C "$TMPDIR/neovim-src" CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX="$HOME/.local/opt/nvim"; then
         run make -C "$TMPDIR/neovim-src" install || true
         run mkdir -p "$BIN_DIR"
-        run ln -sfn "$HOME/.local/opt/nvim/bin/nvim" "$BIN_DIR/nvim"
-        NVIM="$BIN_DIR/nvim"
+        run ln -sfn "$HOME/.local/opt/nvim/bin/nvim" "$BIN_DIR/nvim-real"
+        NVIM="$BIN_DIR/nvim-real"
         if "$NVIM" --version >/dev/null 2>&1; then
           echo "  编译安装完成: $("$NVIM" --version | head -1)"
         else
@@ -539,13 +540,15 @@ fi
 # ── 配置 / 启动器 ───────────────────────────────────────────────
 say "安装配置与启动器"
 backup "$CONFIG_DIR"
+backup "$BIN_DIR/nvim"
 backup "$BIN_DIR/aivim"
 run mkdir -p "$(dirname "$CONFIG_DIR")" "$BIN_DIR"
 run cp -a "$CONFIG_SRC" "$CONFIG_DIR"
+run cp "$NVIM_SRC" "$BIN_DIR/nvim"
 run cp "$BIN_SRC" "$BIN_DIR/aivim"
-run chmod +x "$BIN_DIR/aivim"
+run chmod +x "$BIN_DIR/nvim" "$BIN_DIR/aivim"
 echo "  config: $CONFIG_DIR"
-echo "  launcher: $BIN_DIR/aivim"
+echo "  launcher: $BIN_DIR/nvim (aivim 兼容)"
 
 # ── tree-sitter CLI / 解析器 ─────────────────────────────────────
 say "tree-sitter CLI"
@@ -754,8 +757,8 @@ fi
 
 # ── 自检 ───────────────────────────────────────────────────────
 say "安装后自检"
-if [ "$DRY_RUN" = 0 ] && [ "$PLUGINS_OK" = 1 ] && [ -x "$BIN_DIR/aivim" ]; then
-  if "$BIN_DIR/aivim" --headless "+luafile $CONFIG_DIR/scripts/check.lua" +qa >/tmp/nvim-ai-install-check.log 2>&1; then
+if [ "$DRY_RUN" = 0 ] && [ "$PLUGINS_OK" = 1 ] && [ -x "$BIN_DIR/nvim" ]; then
+  if "$BIN_DIR/nvim" --headless "+luafile $CONFIG_DIR/scripts/check.lua" +qa >/tmp/nvim-ai-install-check.log 2>&1; then
     echo "  按键/选项审计: OK (missing=0)"
   else
     warn "自检未通过,日志: /tmp/nvim-ai-install-check.log"
@@ -766,7 +769,7 @@ fi
 # ── 汇总 ───────────────────────────────────────────────────────
 say "安装完成"
 echo "  config   : $CONFIG_DIR"
-echo "  launcher : $BIN_DIR/aivim"
+echo "  launcher : $BIN_DIR/nvim (aivim 兼容)"
 echo "  data     : $DATA_DIR"
 echo "  nvim     : ${NVIM:-missing}"
 echo "  python   : ${PYTHON:-missing}"
@@ -776,7 +779,7 @@ echo "  gtags    : $(have gtags && gtags --version | head -1 || echo missing)"
 echo "  claude   : $(have claude && claude --version 2>/dev/null | head -1 || echo missing)"
 echo "  codex    : $(have codex && codex --version 2>/dev/null | head -1 || echo missing)"
 echo
-echo "启动: aivim"
+echo "启动: nvim (如果 shell 有旧 alias nvim，请先 unalias nvim)"
 echo "帮助: :AivimDiag / :IndexStatus / ;i?"
 echo "旧配置未改动: $HOME/.config/nvim"
 if [ "${#WARNINGS[@]}" -gt 0 ]; then

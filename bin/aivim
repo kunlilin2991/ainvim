@@ -1,4 +1,3 @@
 #!/bin/sh
-export NVIM_APPNAME=nvim-ai
-export PATH="$HOME/.local/bin:$PATH"
-exec nvim "$@"
+# 兼容旧入口: aivim 等同于 nvim(会使用 ainvim 环境)。
+exec "$(dirname "$0")/nvim" "$@"

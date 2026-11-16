@@ -1,0 +1,16 @@
+#!/bin/sh
+# 让系统 nvim 使用 ainvim 环境(NVIM_APPNAME=nvim-ai)。
+# 真实二进制: 用户级安装为 nvim-real,否则用系统 nvim。
+export NVIM_APPNAME=nvim-ai
+export PATH="$HOME/.local/bin:$PATH"
+REAL="${REAL_NVIM:-}"
+if [ -z "$REAL" ]; then
+  for p in "$HOME/.local/bin/nvim-real" /usr/local/bin/nvim /usr/bin/nvim /opt/nvim/bin/nvim; do
+    if [ -x "$p" ]; then REAL="$p"; break; fi
+  done
+fi
+if [ -z "$REAL" ] || [ ! -x "$REAL" ]; then
+  echo "nvim not found; install Neovim or set REAL_NVIM" >&2
+  exit 127
+fi
+exec "$REAL" "$@"

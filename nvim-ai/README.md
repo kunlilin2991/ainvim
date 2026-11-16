@@ -15,10 +15,10 @@
 # 部署位置(NVIM_APPNAME=nvim-ai)
 ~/.config/nvim-ai
 # 启动器
-~/.local/bin/aivim
+~/.local/bin/nvim (aivim 兼容)
 ```
 
-日常用 `aivim` 启动；旧的 `nvim` / LazyVim 配置完全不动。
+日常用 `nvim` 启动（wrapper 设置 `NVIM_APPNAME=nvim-ai`）；旧的 `~/.config/nvim` / LazyVim 配置完全不动。
 
 ## 设计原则
 
@@ -170,13 +170,13 @@ codex mcp list
 
 ```sh
 # 按键/选项审计(出现 MISSING 会返回非 0)
-aivim --headless "+luafile ~/.config/nvim-ai/scripts/check.lua" +qa
+nvim --headless "+luafile ~/.config/nvim-ai/scripts/check.lua" +qa
 
 # 工作区检测
 python3 ~/.config/nvim-ai/tools/aicx.py workspace detect --json <path>
 
 # agent 健康检查
-aivim "+checkhealth agentic"
+nvim "+checkhealth agentic"
 
 # MCP
 claude mcp list
@@ -185,6 +185,6 @@ claude mcp list
 ## 启动
 
 ```sh
-aivim
-aivim path/to/file.c
+nvim
+nvim path/to/file.c
 ```

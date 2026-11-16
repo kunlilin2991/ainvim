@@ -20,8 +20,10 @@ cd ~/tmp/ainvim
 安装完成后：
 
 ```sh
-aivim
+nvim
 ```
+
+`nvim` 通过 `~/.local/bin/nvim` wrapper 使用 `NVIM_APPNAME=nvim-ai`；如果 shell 里有旧的 `alias nvim=...`，执行 `unalias nvim`，并确保 `~/.local/bin` 在 PATH 前面。`aivim` 仍保留为兼容入口。
 
 旧配置 `~/.config/nvim`、`~/.vimrc` 不会被改动；新配置使用独立 `NVIM_APPNAME=nvim-ai`。
 
@@ -62,7 +64,8 @@ nvim-ai/                   完整 Neovim 配置
   lua/plugins/             LazyVim 覆盖、AI、bufferline、legacy 插件
   tools/aicx.py            索引器 + MCP server
   scripts/check.lua        按键/选项审计
-bin/aivim                  启动器
+bin/nvim                   启动器(wrapper, 使用 ainvim 环境)
+bin/aivim                  兼容入口
 tmux/nvim-ai-mouse.conf    tmux 滚轮透传
 scripts/push-github.sh     安全推送脚本
 REQUIREMENTS.md            需求与设计

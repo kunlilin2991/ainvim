@@ -1,6 +1,6 @@
 # nvim-ai 离线安装包
 
-这个目录是 `aivim` 的完整迁移包：配置、插件、tree-sitter、C/C++ 解析器、安装脚本都在里面。
+这个目录是 `ainvim` 的完整安装包：配置、插件、tree-sitter、C/C++ 解析器、安装脚本都在里面。
 
 ## 一条命令安装
 
@@ -14,7 +14,7 @@ chmod +x install.sh
 
 - 离线时使用 `--offline-bundle` 指定的外部离线包
 - 复制配置到 `~/.config/nvim-ai`
-- 安装启动器 `~/.local/bin/aivim`
+- 安装启动器 `~/.local/bin/nvim`（`aivim` 兼容）
 - 安装 `~/.local/bin/tree-sitter` 和 C/C++ 等解析器
 - `npm i -g` 安装 Claude/Codex ACP adapters（需要网络）
 - 注册 `aivim-gtags` MCP 到 Claude Code / Codex（本机执行，不联网）
@@ -89,8 +89,10 @@ Neovim：发行版自带版本可能太旧，建议用官方 AppImage 或源码�
 ## 安装后
 
 ```sh
-aivim                 # 启动新配置
-aivim path/to/file.c  # 打开文件,首次会自动检测/建索引
+nvim                  # 启动新配置
+nvim path/to/file.c   # 打开文件,首次会自动检测/建索引
+
+如果 shell 里有旧的 `alias nvim=...`，先执行 `unalias nvim`，并确保 `~/.local/bin` 在 PATH 前面。
 ```
 
 常用命令：
@@ -116,7 +118,8 @@ codex mcp list     # aivim-gtags enabled
 ```
 install.sh                 一键安装器(在线优先,离线询问)
 nvim-ai/                   完整配置源码(按键/AI/GLOBAL 定制)
-bin/aivim                  启动器
+bin/nvim                   启动器(wrapper)
+bin/aivim                  兼容入口
 tmux/nvim-ai-mouse.conf    tmux 滚轮透传
 scripts/check.lua          按键/选项审计
 scripts/push-github.sh     SSH 推送脚本
@@ -164,10 +167,10 @@ MANIFEST.txt / SHA256SUMS
 
 ```sh
 rm -rf ~/.config/nvim-ai ~/.local/share/nvim-ai ~/.local/state/nvim-ai ~/.cache/nvim-ai
-rm -f ~/.local/bin/aivim ~/.local/bin/tree-sitter
+rm -f ~/.local/bin/nvim ~/.local/bin/nvim-real ~/.local/bin/aivim ~/.local/bin/tree-sitter
 # MCP 可选:
 claude mcp remove aivim-gtags
 codex mcp remove aivim-gtags
 ```
 
-安装时的旧配置备份在 `~/.config/nvim-ai.bak-*`、`~/.local/bin/aivim.bak-*`。
+安装时的旧配置备份在 `~/.config/nvim-ai.bak-*`、`~/.local/bin/nvim.bak-*`、`~/.local/bin/aivim.bak-*`。
