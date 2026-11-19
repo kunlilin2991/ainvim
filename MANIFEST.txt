@@ -1,8 +1,8 @@
 ainvim repository (online installer)
-date: 2026-11-19T17:02:17+08:00
+date: 2026-11-19T17:18:01+08:00
 config_version: VERSION = "2026-11-16.4"
-config_files: 29
+config_files: 27
 launcher: ~/.local/bin/nvim (aivim compatible)
 default nvim: ~/.config/nvim -> nvim-ai
 cmdline: noice (top, cmdheight=0)
-ai: agent terminal (;it/;if) + direct API explain (;ie/;iv/;iq) + ACP (;iT)
+ai: terminal agent only (;it open/close, ;if selection-or-line with code, ;iP path only)

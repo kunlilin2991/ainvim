@@ -210,15 +210,24 @@ return {
         mode = { "n", "x" },
         desc = "上下文打进 agent 终端(不提交)",
       },
+      {
+        "<leader>iP",
+        function() require("aivim.agent_term").forward_path() end,
+        mode = { "n", "x" },
+        desc = "只发路径+行号到 agent 终端",
+      },
+      {
+        "<leader>iq",
+        function() require("aivim.agent_term").close() end,
+        mode = { "n", "t" },
+        desc = "关闭 agent 终端",
+      },
 
       -- ── 快速解释(直连 API,不产生 agent 工具调用) ──
-      { "<leader>ie", function() require("aivim.explain").explain() end, desc = "解释当前函数(浮窗)" },
-      { "<leader>iv", function() require("aivim.explain").explain() end, mode = "x", desc = "解释选中代码(浮窗)" },
-      { "<leader>iq", function() require("aivim.explain").ask() end, desc = "问这段代码(浮窗)" },
 
       -- ── ACP 面板(agentic.nvim) ──
       { "<leader>iT", function() require("agentic").toggle() end, mode = { "n", "v", "i" }, desc = "Agentic 面板(ACP)" },
-      { "<leader>iP", function() require("agentic").new_session_with_provider() end, desc = "选择 provider" },
+      { "<leader>ip", function() require("agentic").new_session_with_provider() end, desc = "选择 provider" },
       { "<leader>iR", function() require("agentic").new_session() end, desc = "新会话" },
       { "<leader>ir", function() require("agentic").restore_session() end, desc = "恢复会话" },
       { "<leader>is", function() require("agentic").add_selection() end, mode = "x", desc = "发送选区" },
@@ -230,9 +239,11 @@ return {
         function()
           vim.notify(
             table.concat({
-              ";it       切换 agent 终端(claude/codex)   ;if 上下文打进终端(不提交)",
-              ";ie/;iv/;iq  快速解释函数/选区/自定义问题(浮窗,直连API)",
-              ";iT       Agentic 面板(ACP)   ;iP 选 provider",
+              ";it       切换 agent 终端(claude/codex)",
+              ";iq       关闭 agent 终端",
+              ";if       选区/当前行(含代码)打进终端, 不提交",
+              ";iP       只发 路径+行号, 不附代码",
+              ";iT       Agentic 面板(ACP)   ;ip 选 provider",
               ";is/;ib/;ia  发送选区/加文件/加函数   ;iS 停止",
               ";ir       恢复会话",
             }, "\n"),

@@ -152,22 +152,21 @@ local function function_range(buf)
 end
 
 --- 有选区用选区,否则函数,否则当前行
+--- 选区,否则当前行
 local function pick()
-  local buf = vim.api.nvim_get_current_buf()
   local sr, er = visual_range()
   if sr then
-    return sr, er, "选区"
-  end
-  sr, er = function_range(buf)
-  if sr then
-    return sr, er, "当前函数"
+    return sr, er
   end
   local row = vim.api.nvim_win_get_cursor(0)[1] - 1
-  return row, row, "当前行"
+  return row, row
 end
 
---- 生成要发进终端输入框的文本(单行,方便 TUI 输入)
-function M.compose()
+--- 生成要发进终端输入框的文本
+--- 默认: 路径+行号, 附代码原文; opts.with_code=false 时只发路径
+--- @param opts? { with_code?: boolean }
+function M.compose(opts)
+  opts = opts or {}
   local buf = code_buf()
   local path = vim.api.nvim_buf_get_name(buf)
   if path == "" then
@@ -178,8 +177,27 @@ function M.compose()
   if root and path:sub(1, #root + 1) == root .. "/" then
     rel = path:sub(#root + 2)
   end
-  local sr, er, kind = pick()
-  return ("@%s:%d-%d  (%s)"):format(rel, sr + 1, er + 1, kind)
+  local sr, er = pick()
+  local total = vim.api.nvim_buf_line_count(buf)
+  if er >= total then
+    er = total - 1
+  end
+
+  if opts.with_code == false then
+    return ("@%s:%d-%d"):format(rel, sr + 1, er + 1)
+  end
+
+  local lines = vim.api.nvim_buf_get_lines(buf, sr, er + 1, false)
+  local numbered = {}
+  for i, line in ipairs(lines) do
+    numbered[i] = string.format("%6d  %s", sr + i, line)
+  end
+  return table.concat({
+    ("%s:%d-%d"):format(rel, sr + 1, er + 1),
+    "```" .. vim.bo[buf].filetype,
+    table.concat(numbered, "\n"),
+    "```",
+  }, "\n")
 end
 
 --- 把文本作为"粘贴"送进终端,不发送回车
@@ -214,9 +232,10 @@ function M.send_text(text)
 end
 
 --- 把光标处上下文送进 agent 终端输入框(不提交)
-function M.forward()
+--- @param opts? { with_code?: boolean }
+function M.forward(opts)
   M.mark_code_buf()
-  local text, err = M.compose()
+  local text, err = M.compose(opts)
   if not text then
     vim.notify("[aivim] " .. err, vim.log.levels.WARN)
     return
@@ -224,6 +243,34 @@ function M.forward()
   local ok, serr = M.send_text(text)
   if not ok then
     vim.notify("[aivim] " .. serr, vim.log.levels.WARN)
+  end
+end
+
+--- 只发文件路径+行号(不附代码),让 agent 自己读
+function M.forward_path()
+  M.mark_code_buf()
+  local text, err = M.compose({ with_code = false })
+  if not text then
+    vim.notify("[aivim] " .. err, vim.log.levels.WARN)
+    return
+  end
+  local ok, serr = M.send_text(text)
+  if not ok then
+    vim.notify("[aivim] " .. serr, vim.log.levels.WARN)
+  end
+end
+
+--- 关闭(隐藏)终端
+function M.close()
+  local tab = vim.api.nvim_get_current_tabpage()
+  local entry = terms[tab]
+  if entry and entry.buf and vim.api.nvim_buf_is_valid(entry.buf) then
+    for _, w in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
+      if vim.api.nvim_win_get_buf(w) == entry.buf then
+        vim.cmd("hide")
+        return
+      end
+    end
   end
 end
 
