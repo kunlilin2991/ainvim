@@ -86,29 +86,36 @@ function M.open(opts)
   vim.keymap.set("t", "<C-q>", function()
     vim.cmd("hide")
   end, { buffer = buf, desc = "隐藏 agent 终端" })
-  -- Terminal-Job 模式下 Neovim 不解析多键前缀,而 agent TUI 会自己处理 Esc/普通字符。
-  -- 所以不要拦截 Esc(那是给 claude 的),改用终端里没人用的组合键脱身:
-  --   <C-\><C-n>   Neovim 原生"退出终端到 normal"      (标准做法,始终有效)
-  --   <M-h/j/k/l>  直接跳到相邻窗口
-  --   <M-w>        窗口循环
-  --   <C-q>        隐藏终端
-  vim.keymap.set("t", "<C-\\><C-n>", "<C-\\><C-n>", {
+  -- Terminal-Job 模式下 Neovim 不解析 <C-w>x 这类多键前缀,而 Esc 属于 agent TUI。
+  -- 所以用功能键脱身(终端里不会被 agent 吃掉):
+  --   <F2> 脱离终端到 normal 模式(之后可用原生 <C-w>)
+  --   <F3> 左窗口   <F4> 下窗口   <F5> 上窗口   <F6> 右窗口
+  --   <F7> 窗口循环
+  vim.keymap.set("t", "<F2>", "<C-\\><C-n>", {
     buffer = buf,
     remap = true,
-    desc = "退出到 normal 模式",
+    desc = "脱离终端到 normal",
   })
-  for _, dir in ipairs({ "h", "j", "k", "l" }) do
-    vim.keymap.set("t", "<M-" .. dir .. ">", "<C-\\><C-n><C-w>" .. dir, {
+  local fkeys = { ["<F3>"] = "h", ["<F4>"] = "j", ["<F5>"] = "k", ["<F6>"] = "l" }
+  for key, dir in pairs(fkeys) do
+    vim.keymap.set("t", key, "<C-\\><C-n><C-w>" .. dir, {
       buffer = buf,
       remap = true,
       desc = "跳到 " .. dir .. " 窗口",
     })
+    -- normal 模式同样可用,保持一致
+    vim.keymap.set("n", key, "<C-w>" .. dir, { remap = true, desc = "跳到 " .. dir .. " 窗口" })
   end
-  vim.keymap.set("t", "<M-w>", "<C-\\><C-n><C-w>w", {
+  vim.keymap.set("t", "<F7>", "<C-\\><C-n><C-w>w", {
     buffer = buf,
     remap = true,
     desc = "窗口循环",
   })
+  vim.keymap.set("n", "<F7>", "<C-w>w", { remap = true, desc = "窗口循环" })
+  -- normal 模式下 F2 = 切到 agent 终端(常驻,不依赖窗口位置)
+  vim.keymap.set("n", "<F2>", function()
+    M.focus()
+  end, { desc = "切到 agent 终端" })
 
   entry = { buf = buf, job = job, tab = tab }
   terms[tab] = entry
