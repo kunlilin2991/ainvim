@@ -6,6 +6,14 @@ return {
   { "nvim-mini/mini.pairs", enabled = false },
   -- mini.ai 改变 a/i 文本对象语义;vimrc 没有这个习惯
   { "nvim-mini/mini.ai", enabled = false },
-  -- noice 改变命令行/消息 UI,影响 ;. 等 vimrc 习惯
-  { "folke/noice.nvim", enabled = false },
+  -- noice: 恢复 LazyVim 的顶部命令行/消息 UI(cmdheight=0)
+  -- 注意: 命令行会显示在顶部,不再是底部状态行
+  {
+    "folke/noice.nvim",
+    opts = {
+      cmdline = { enabled = true },
+      messages = { enabled = true },
+      popupmenu = { enabled = true },
+    },
+  },
 }

@@ -1,7 +1,7 @@
 ainvim repository (online installer)
-date: 2026-11-19T10:16:53+08:00
+date: 2026-11-19T14:18:43+08:00
 config_version: VERSION = "2026-11-16.4"
 config_files: 26
 launcher: ~/.local/bin/nvim (aivim compatible)
 default nvim: ~/.config/nvim -> nvim-ai
-offline: separate ainvim-offline-*.tar.gz via --offline-bundle
+cmdline: noice (top, cmdheight=0)
