@@ -28,7 +28,8 @@ Leader 为 **`;`**，localleader 为 **`\`**。以下 `<leader>` 即 `;`。
 
 > 顶部 bufferline 只显示「序号 + 文件名」：无文件类型图标、无诊断、无修改点、无关闭 `x`。序号是 ordinal，和 `;1`…`;12` 对应。
 | `wn` | 窗口循环（`<C-w><C-w>`） |
-| `<C-w>h/j/k/l` | 窗口跳转（normal **和 terminal** 模式都可用） |
+| `<C-w>h/j/k/l` | 窗口跳转（normal **和 agent 终端** 都可用） |
+| `<Esc><Esc>` | agent 终端内退出到 normal 模式 |
 | `<C-w>w` | 窗口循环（normal 和 terminal 都可用） |
 | `;wl` / `;wr` | 右 / 左窗口（保持 vimrc 的映射方向） |
 | `;wj` / `;wk` | 下 / 上窗口 |

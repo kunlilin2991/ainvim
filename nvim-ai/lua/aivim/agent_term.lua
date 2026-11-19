@@ -44,7 +44,7 @@ local function term_alive(entry)
 end
 
 --- 打开(或复用)当前 tab 的 agent 终端
---- @param opts? { cmd?: string, vertical?: boolean }
+--- @param opts? { cmd?: string, vertical?: boolean, width?: number, height?: number }
 function M.open(opts)
   opts = opts or {}
   local tab = vim.api.nvim_get_current_tabpage()
@@ -61,11 +61,14 @@ function M.open(opts)
   end
 
   local cmd = opts.cmd or agent_cmd()
-  local height = math.max(10, math.floor(vim.o.lines * 0.4))
-  if opts.vertical then
-    vim.cmd("botright vertical new")
+  -- 默认右侧竖直分割
+  local vertical = opts.vertical ~= false
+  if vertical then
+    local width = opts.width or math.max(60, math.floor(vim.o.columns * 0.42))
+    vim.cmd("botright " .. width .. "vnew")
   else
-    vim.cmd(height .. "new")
+    local height = opts.height or math.max(10, math.floor(vim.o.lines * 0.4))
+    vim.cmd("botright " .. height .. "new")
   end
   local buf = vim.api.nvim_get_current_buf()
   local job = vim.fn.jobstart({ vim.o.shell, "-lc", cmd }, {
@@ -83,6 +86,27 @@ function M.open(opts)
   vim.keymap.set("t", "<C-q>", function()
     vim.cmd("hide")
   end, { buffer = buf, desc = "隐藏 agent 终端" })
+  -- Terminal-Job 模式不解析多键前缀,需在 t 模式显式映射。
+  --   <C-w>h/j/k/l  直接跳到相邻窗口
+  --   <C-w>w        窗口循环
+  --   <Esc><Esc>    退出到 normal(之后可用原生 <C-w>)
+  for _, dir in ipairs({ "h", "j", "k", "l" }) do
+    vim.keymap.set("t", "<C-w>" .. dir, "<C-\\><C-n><C-w>" .. dir, {
+      buffer = buf,
+      remap = true,
+      desc = "跳到 " .. dir .. " 窗口",
+    })
+  end
+  vim.keymap.set("t", "<C-w>w", "<C-\\><C-n><C-w>w", {
+    buffer = buf,
+    remap = true,
+    desc = "窗口循环",
+  })
+  vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", {
+    buffer = buf,
+    remap = true,
+    desc = "退出到 normal 模式",
+  })
 
   entry = { buf = buf, job = job, tab = tab }
   terms[tab] = entry
