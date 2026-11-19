@@ -86,26 +86,28 @@ function M.open(opts)
   vim.keymap.set("t", "<C-q>", function()
     vim.cmd("hide")
   end, { buffer = buf, desc = "隐藏 agent 终端" })
-  -- Terminal-Job 模式不解析多键前缀,需在 t 模式显式映射。
-  --   <C-w>h/j/k/l  直接跳到相邻窗口
-  --   <C-w>w        窗口循环
-  --   <Esc><Esc>    退出到 normal(之后可用原生 <C-w>)
+  -- Terminal-Job 模式下 Neovim 不解析多键前缀,而 agent TUI 会自己处理 Esc/普通字符。
+  -- 所以不要拦截 Esc(那是给 claude 的),改用终端里没人用的组合键脱身:
+  --   <C-\><C-n>   Neovim 原生"退出终端到 normal"      (标准做法,始终有效)
+  --   <M-h/j/k/l>  直接跳到相邻窗口
+  --   <M-w>        窗口循环
+  --   <C-q>        隐藏终端
+  vim.keymap.set("t", "<C-\\><C-n>", "<C-\\><C-n>", {
+    buffer = buf,
+    remap = true,
+    desc = "退出到 normal 模式",
+  })
   for _, dir in ipairs({ "h", "j", "k", "l" }) do
-    vim.keymap.set("t", "<C-w>" .. dir, "<C-\\><C-n><C-w>" .. dir, {
+    vim.keymap.set("t", "<M-" .. dir .. ">", "<C-\\><C-n><C-w>" .. dir, {
       buffer = buf,
       remap = true,
       desc = "跳到 " .. dir .. " 窗口",
     })
   end
-  vim.keymap.set("t", "<C-w>w", "<C-\\><C-n><C-w>w", {
+  vim.keymap.set("t", "<M-w>", "<C-\\><C-n><C-w>w", {
     buffer = buf,
     remap = true,
     desc = "窗口循环",
-  })
-  vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", {
-    buffer = buf,
-    remap = true,
-    desc = "退出到 normal 模式",
   })
 
   entry = { buf = buf, job = job, tab = tab }
