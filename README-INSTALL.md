@@ -21,7 +21,7 @@ chmod +x install.sh
 - 如果存在 `~/.tmux.conf`，追加滚轮透传配置（让 Neovim 自己处理滚轮）
 - 运行按键/选项自检
 
-**旧的 `~/.config/nvim`、`~/.vimrc` 不会动。**
+**默认 `nvim` 会指向新配置；旧的 `~/.config/nvim`/数据目录会先备份。`~/.vimrc` 不动。**
 
 ## 依赖安装策略
 
@@ -173,4 +173,4 @@ claude mcp remove aivim-gtags
 codex mcp remove aivim-gtags
 ```
 
-安装时的旧配置备份在 `~/.config/nvim-ai.bak-*`、`~/.local/bin/nvim.bak-*`、`~/.local/bin/aivim.bak-*`。
+安装时的旧配置备份在 `~/.config/nvim-ai.bak-*`、`~/.config/nvim.bak-*`、`~/.local/bin/nvim.bak-*`、`~/.local/bin/aivim.bak-*`、`~/.local/share/nvim.bak-*` 等。

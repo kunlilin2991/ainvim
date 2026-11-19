@@ -25,7 +25,7 @@ nvim
 
 `nvim` 通过 `~/.local/bin/nvim` wrapper 使用 `NVIM_APPNAME=nvim-ai`；如果 shell 里有旧的 `alias nvim=...`，执行 `unalias nvim`，并确保 `~/.local/bin` 在 PATH 前面。`aivim` 仍保留为兼容入口。
 
-旧配置 `~/.config/nvim`、`~/.vimrc` 不会被改动；新配置使用独立 `NVIM_APPNAME=nvim-ai`。
+安装会把默认 `nvim` 指向新配置（`~/.config/nvim` 及数据/state/cache 软链到 `nvim-ai`）；旧的 `~/.config/nvim`/数据目录会先备份。`~/.vimrc` 不动。
 
 ## 安装器会做什么
 

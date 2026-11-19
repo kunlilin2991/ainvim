@@ -547,8 +547,27 @@ run cp -a "$CONFIG_SRC" "$CONFIG_DIR"
 run cp "$NVIM_SRC" "$BIN_DIR/nvim"
 run cp "$BIN_SRC" "$BIN_DIR/aivim"
 run chmod +x "$BIN_DIR/nvim" "$BIN_DIR/aivim"
+# 让默认 nvim 也使用本配置,不依赖 wrapper/PATH/alias
+if [ -e "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then
+  backup "$HOME/.config/nvim"
+fi
+run ln -sfn "$CONFIG_DIR" "$HOME/.config/nvim"
+for d in share state; do
+  base="$HOME/.local/$d"
+  run mkdir -p "$base"
+  if [ -e "$base/nvim" ] && [ ! -L "$base/nvim" ]; then
+    backup "$base/nvim"
+  fi
+  run ln -sfn "nvim-ai" "$base/nvim"
+done
+run mkdir -p "$HOME/.cache"
+if [ -e "$HOME/.cache/nvim" ] && [ ! -L "$HOME/.cache/nvim" ]; then
+  backup "$HOME/.cache/nvim"
+fi
+run ln -sfn "nvim-ai" "$HOME/.cache/nvim"
 echo "  config: $CONFIG_DIR"
 echo "  launcher: $BIN_DIR/nvim (aivim 兼容)"
+echo "  default nvim: $HOME/.config/nvim -> $CONFIG_DIR"
 
 # ── tree-sitter CLI / 解析器 ─────────────────────────────────────
 say "tree-sitter CLI"
@@ -781,7 +800,7 @@ echo "  codex    : $(have codex && codex --version 2>/dev/null | head -1 || echo
 echo
 echo "启动: nvim (如果 shell 有旧 alias nvim，请先 unalias nvim)"
 echo "帮助: :AivimDiag / :IndexStatus / ;i?"
-echo "旧配置未改动: $HOME/.config/nvim"
+echo "默认 nvim 已指向新配置;旧配置已备份为 *.bak-*"
 if [ "${#WARNINGS[@]}" -gt 0 ]; then
   echo
   echo "注意:"
