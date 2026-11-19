@@ -22,6 +22,14 @@ map("n", "<leader>wr", "<C-w>h", { desc = "左侧窗口" })
 map("n", "<leader>wj", "<C-w>j", { desc = "下方窗口" })
 map("n", "<leader>wk", "<C-w>k", { desc = "上方窗口" })
 
+-- ── 窗口跳转: normal 与 terminal 模式都可用(终端里也能跳到代码窗口)
+for _, d in ipairs({ "h", "j", "k", "l" }) do
+  for _, mode in ipairs({ "n", "t" }) do
+    map(mode, "<C-w>" .. d, "<C-w>" .. d, { remap = true, desc = "窗口 " .. d })
+  end
+end
+map({ "n", "t" }, "<C-w>w", "<C-w>w", { remap = true, desc = "窗口循环" })
+
 -- ── 搜索/命令(vimrc)
 map("n", "<leader>/", "<cmd>nohlsearch<cr>", { desc = "清除搜索高亮" })
 map("n", "<leader>.", ":<up><cr>", { remap = true, desc = "重复上一条命令" })

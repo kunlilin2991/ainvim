@@ -1,5 +1,5 @@
 b1378e92da39da436bf6e1634b46c980c3de4a3e9b727dc522d91928c23e37aa  ./.gitignore
-eb300e0c120db81ea1fb43140e42ec1cf5ed7ea6bbaa2d0d46081dfddcf940d6  ./MANIFEST.txt
+5a6ae4269e093b240e2773652e6c2ff141f8c2c52a0745da1cddee8f760e670d  ./MANIFEST.txt
 247947afab4f78892e4232fd571374ecf03bbd809e4692e78bbe28745cb80f16  ./README-INSTALL.md
 8ba728c767f43307a6635d32e998c1cfa794459730d2770cfe7f02d76e367f4b  ./README.md
 4a178d2ced0f6557d8a16d787727d591d687b6740d0657f9272d6f8f364a8970  ./REQUIREMENTS.md
@@ -7,7 +7,7 @@ d6069e642f83aa3f2b02923dfa73372b3ab2085d75dd5199f50db9769829c925  ./bin/aivim
 778bb6da74b164f3c65349c0b49a747ed04b3606deb1916a65ecbb376f049fab  ./bin/nvim
 25cc263023969e7978538cc844ff8e1e22a733d0e7715f9248b6507862ce43a7  ./install.sh
 862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793  ./nvim-ai/.gitignore
-f1f9b4cf0cf65a0ab9883c25bdcd333f30fb20f5ac5361a463a582200f53272c  ./nvim-ai/KEYMAPS.md
+502437afca11750152ffaa5a3f37fad3578ed5aebc9e9ed36409fe31fa18aae9  ./nvim-ai/KEYMAPS.md
 720402c2e1dced53bb084da31fb1adf561384c72a0e4bc889d7a250a2bc3b5c5  ./nvim-ai/README.md
 4949ddf9b0e9f21ed0d32aa42fc62808b518c169ea1811fa2daa2163521bff5f  ./nvim-ai/docs/mcp.md
 cfb13d0eadb590967d4440c255d92ab8219b2bc7a6652612caf96a2d4e51429d  ./nvim-ai/init.lua
@@ -18,7 +18,7 @@ edc3a4ec9514d49abfd900defb96d01569ac055f7e44d1c22ffa2f500b3f35d3  ./nvim-ai/lua/
 804c9246709fda76b7f1865fd14528149f3adac85afff9030db590d82536e2a3  ./nvim-ai/lua/aivim/index.lua
 7ccedfd0a5fff7fdbca9af992fe00e718bacddbfc1d55a530c2f7d25d3b27857  ./nvim-ai/lua/aivim/workspace.lua
 f65326dbf4b4dd935e90fa1a7efb1c9d0e6d5f39155ce66fa482d4f38aad9eb0  ./nvim-ai/lua/config/autocmds.lua
-cf6fcbfa189d5a8da474572f99694d5a36e971a66208bebd61be16f465663d30  ./nvim-ai/lua/config/keymaps.lua
+7b99d7275c556f7dcef67c15ab2805610a14006b739b16127c1be9395152d301  ./nvim-ai/lua/config/keymaps.lua
 3f693a177127cca3b97992c6041a182ba520059671cf44c84964df9e221e26fe  ./nvim-ai/lua/config/lazy.lua
 ced4060f148c0b718227dc70de317094e0d1ffe132fe5fd4e5ad93e73ccc49f7  ./nvim-ai/lua/config/options.lua
 6f00a10d3a95cc9bcd87e95bea7931929f46485d4003e4fb145edf2904dd31c5  ./nvim-ai/lua/plugins/ai.lua
