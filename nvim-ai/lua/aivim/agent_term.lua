@@ -86,36 +86,32 @@ function M.open(opts)
   vim.keymap.set("t", "<C-q>", function()
     vim.cmd("hide")
   end, { buffer = buf, desc = "隐藏 agent 终端" })
-  -- Terminal-Job 模式下 Neovim 不解析 <C-w>x 这类多键前缀,而 Esc 属于 agent TUI。
-  -- 所以用功能键脱身(终端里不会被 agent 吃掉):
-  --   <F2> 脱离终端到 normal 模式(之后可用原生 <C-w>)
-  --   <F3> 左窗口   <F4> 下窗口   <F5> 上窗口   <F6> 右窗口
-  --   <F7> 窗口循环
-  vim.keymap.set("t", "<F2>", "<C-\\><C-n>", {
-    buffer = buf,
-    remap = true,
-    desc = "脱离终端到 normal",
-  })
-  local fkeys = { ["<F3>"] = "h", ["<F4>"] = "j", ["<F5>"] = "k", ["<F6>"] = "l" }
-  for key, dir in pairs(fkeys) do
-    vim.keymap.set("t", key, "<C-\\><C-n><C-w>" .. dir, {
-      buffer = buf,
-      remap = true,
-      desc = "跳到 " .. dir .. " 窗口",
-    })
-    -- normal 模式同样可用,保持一致
-    vim.keymap.set("n", key, "<C-w>" .. dir, { remap = true, desc = "跳到 " .. dir .. " 窗口" })
-  end
-  vim.keymap.set("t", "<F7>", "<C-\\><C-n><C-w>w", {
+  -- Terminal-Job 模式不解析 <C-w>x 多键前缀,Esc 又属于 agent TUI。
+  -- 只用三个 F 键:
+  --   <F2> 打开/切到终端并送上下文(等价 ;it + ;if)
+  --   <F3> 窗口循环
+  --   <F4> 关闭终端
+  vim.keymap.set("t", "<F2>", function()
+    -- 在终端里按 F2 = 把上下文送进当前终端
+    M.forward()
+  end, { buffer = buf, desc = "送上下文到终端" })
+  vim.keymap.set("t", "<F3>", "<C-\\><C-n><C-w>w", {
     buffer = buf,
     remap = true,
     desc = "窗口循环",
   })
-  vim.keymap.set("n", "<F7>", "<C-w>w", { remap = true, desc = "窗口循环" })
-  -- normal 模式下 F2 = 切到 agent 终端(常驻,不依赖窗口位置)
+  vim.keymap.set("t", "<F4>", function()
+    vim.cmd("hide")
+  end, { buffer = buf, desc = "关闭终端" })
+
+  -- normal 模式下全局可用
   vim.keymap.set("n", "<F2>", function()
-    M.focus()
-  end, { desc = "切到 agent 终端" })
+    M.forward()
+  end, { desc = "打开终端并送上下文" })
+  vim.keymap.set("n", "<F3>", "<C-w>w", { remap = true, desc = "窗口循环" })
+  vim.keymap.set("n", "<F4>", function()
+    M.close()
+  end, { desc = "关闭终端" })
 
   entry = { buf = buf, job = job, tab = tab }
   terms[tab] = entry
