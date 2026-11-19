@@ -197,33 +197,44 @@ return {
       },
     },
     keys = {
-      { "<leader>it", function() require("agentic").toggle() end, mode = { "n", "v", "i" }, desc = "AI 面板" },
-      { "<leader>ic", function() require("agentic").toggle() end, mode = { "n", "v", "i" }, desc = "Claude Code" },
-      { "<leader>iP", function() require("agentic").new_session_with_provider() end, desc = "选择 agent/provider" },
+      -- ── 终端 agent(推荐): 普通 shell + CLI,不经 ACP/MCP ──
+      {
+        "<leader>it",
+        function() require("aivim.agent_term").toggle() end,
+        mode = { "n", "t" },
+        desc = "切换 agent 终端(claude/codex)",
+      },
+      {
+        "<leader>if",
+        function() require("aivim.agent_term").forward() end,
+        mode = { "n", "x" },
+        desc = "上下文打进 agent 终端(不提交)",
+      },
+
+      -- ── 快速解释(直连 API,不产生 agent 工具调用) ──
+      { "<leader>ie", function() require("aivim.explain").explain() end, desc = "解释当前函数(浮窗)" },
+      { "<leader>iv", function() require("aivim.explain").explain() end, mode = "x", desc = "解释选中代码(浮窗)" },
+      { "<leader>iq", function() require("aivim.explain").ask() end, desc = "问这段代码(浮窗)" },
+
+      -- ── ACP 面板(agentic.nvim) ──
+      { "<leader>iT", function() require("agentic").toggle() end, mode = { "n", "v", "i" }, desc = "Agentic 面板(ACP)" },
+      { "<leader>iP", function() require("agentic").new_session_with_provider() end, desc = "选择 provider" },
       { "<leader>iR", function() require("agentic").new_session() end, desc = "新会话" },
       { "<leader>ir", function() require("agentic").restore_session() end, desc = "恢复会话" },
       { "<leader>is", function() require("agentic").add_selection() end, mode = "x", desc = "发送选区" },
       { "<leader>ib", function() require("agentic").add_file() end, desc = "加入当前文件" },
-      { "<leader>id", function() require("agentic").add_buffer_diagnostics() end, desc = "加入诊断" },
+      { "<leader>ia", add_current_function, desc = "加入当前函数" },
       { "<leader>iS", function() require("agentic").stop_generation() end, desc = "停止生成" },
-      { "<leader>ia", add_current_function, desc = "把当前函数加入上下文" },
-      { "<leader>ie", explain_function, desc = "解释当前函数(自动提问)" },
-      { "<leader>iE", explain_file, desc = "解析当前文件(自动提问)" },
-      { "<leader>ix", explain_selection, mode = "x", desc = "解释选中代码(自动提问)" },
       {
         "<leader>i?",
         function()
           vim.notify(
             table.concat({
-              ";it / ;ic  AI 面板(默认 Claude)",
-              ";iP       选择 provider(Claude/Codex/Gemini/OpenCode)",
-              ";ie       解释当前函数(自动提问,只带函数体)",
-              ";iE       解析当前文件(自动提问,不塞整个文件)",
-              ";ix       解释选中代码(visual,自动提问,>800 行会拦截)",
-              ";ia       当前函数加入上下文   ;ib 加入当前文件",
-              ";is       发送选区   ;id 加入诊断",
-              ";iR       新会话   ;ir 恢复会话   ;iS 停止生成",
-              "面板内:  \\s 切 provider   \\m 切 model   \\l 会话列表   ]c/[c 跳 diff",
+              ";it       切换 agent 终端(claude/codex)   ;if 上下文打进终端(不提交)",
+              ";ie/;iv/;iq  快速解释函数/选区/自定义问题(浮窗,直连API)",
+              ";iT       Agentic 面板(ACP)   ;iP 选 provider",
+              ";is/;ib/;ia  发送选区/加文件/加函数   ;iS 停止",
+              ";ir       恢复会话",
             }, "\n"),
             vim.log.levels.INFO
           )
