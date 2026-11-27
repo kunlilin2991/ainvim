@@ -91,11 +91,22 @@ map("n", "<F8>", "<cmd>IndentLinesToggle<cr>", { desc = "缩进线" })
 map("n", "<C-k>", "<Plug>(ale_previous_wrap)", { remap = true, desc = "上一个错误" })
 map("n", "<C-j>", "<Plug>(ale_next_wrap)", { remap = true, desc = "下一个错误" })
 
--- ── easymotion: 小写向后,大写向前
-map({ "n", "x", "o" }, "<leader><leader>w", "<Plug>(easymotion-b)", { remap = true, desc = "easymotion 词首(向后)" })
-map({ "n", "x", "o" }, "<leader><leader>W", "<Plug>(easymotion-w)", { remap = true, desc = "easymotion 词首(向前)" })
-map({ "n", "x", "o" }, "<leader><leader>f", "<Plug>(easymotion-F)", { remap = true, desc = "easymotion 字符(向后)" })
-map({ "n", "x", "o" }, "<leader><leader>F", "<Plug>(easymotion-f)", { remap = true, desc = "easymotion 字符(向前)" })
+-- ── easymotion: 小写=向后, 大写=向前
+-- 直接 feed <Plug>,不加 remap,避免 leader(;) 前缀解析干扰
+local function em(plug)
+  return function()
+    vim.api.nvim_feedkeys(
+      vim.api.nvim_replace_termcodes("<Plug>(" .. plug .. ")", true, false, true),
+      "m",
+      false
+    )
+  end
+end
+
+map({ "n", "x", "o" }, "<leader><leader>w", em("easymotion-b"), { desc = "easymotion 词首(向后)" })
+map({ "n", "x", "o" }, "<leader><leader>W", em("easymotion-w"), { desc = "easymotion 词首(向前)" })
+map({ "n", "x", "o" }, "<leader><leader>f", em("easymotion-F"), { desc = "easymotion 字符(向后)" })
+map({ "n", "x", "o" }, "<leader><leader>F", em("easymotion-f"), { desc = "easymotion 字符(向前)" })
 
 -- ── 索引查询(vimrc: gutentags_plus 的 ;g* / ;j*)
 local function idx()

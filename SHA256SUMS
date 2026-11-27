@@ -18,7 +18,7 @@ c5e6e47a04e9afbf60e324cdbc6728357a63ef1eb10b68eb46539e57c02eb56b  ./nvim-ai/lazy
 804c9246709fda76b7f1865fd14528149f3adac85afff9030db590d82536e2a3  ./nvim-ai/lua/aivim/index.lua
 7ccedfd0a5fff7fdbca9af992fe00e718bacddbfc1d55a530c2f7d25d3b27857  ./nvim-ai/lua/aivim/workspace.lua
 f65326dbf4b4dd935e90fa1a7efb1c9d0e6d5f39155ce66fa482d4f38aad9eb0  ./nvim-ai/lua/config/autocmds.lua
-7b99d7275c556f7dcef67c15ab2805610a14006b739b16127c1be9395152d301  ./nvim-ai/lua/config/keymaps.lua
+7c2671a39ce2e9b828c90dff29d1173a8744b28b9c885837fb3bd60a8c43f193  ./nvim-ai/lua/config/keymaps.lua
 3f693a177127cca3b97992c6041a182ba520059671cf44c84964df9e221e26fe  ./nvim-ai/lua/config/lazy.lua
 ced4060f148c0b718227dc70de317094e0d1ffe132fe5fd4e5ad93e73ccc49f7  ./nvim-ai/lua/config/options.lua
 6f00a10d3a95cc9bcd87e95bea7931929f46485d4003e4fb145edf2904dd31c5  ./nvim-ai/lua/plugins/ai.lua
