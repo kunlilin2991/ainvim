@@ -38,9 +38,11 @@ return {
     cmd = { "NERDTreeToggle", "NERDTree", "NERDTreeFind" },
     init = function()
       vim.g.NERDTreeShowHidden = 0
-      -- 宽度: 约 30% 宽度,夹在 20~40 列之间(竖屏/宽屏都不至于太占地方)
+      -- 左对齐
+      vim.g.NERDTreeWinPos = "left"
+      -- 宽度: 约 20% 宽度,夹在 16~30 列之间(竖屏也不挤)
       local function tree_width()
-        return math.max(20, math.min(40, math.floor(vim.o.columns * 0.3)))
+        return math.max(16, math.min(30, math.floor(vim.o.columns * 0.2)))
       end
       vim.g.NERDTreeWinSize = tree_width()
       vim.g.NERDTreeMinimalUI = 1
