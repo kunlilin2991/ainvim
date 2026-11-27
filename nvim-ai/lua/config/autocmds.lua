@@ -31,5 +31,19 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "quickfix: q 关闭窗口",
 })
 
+
+-- 剪贴板: SSH 环境下确保 clipboard 选项生效(可能被插件覆盖)
+vim.api.nvim_create_autocmd("VimEnter", {
+  group = grp,
+  callback = function()
+    if vim.env.SSH_TTY or vim.env.SSH_CONNECTION then
+      if type(vim.g.clipboard) == "table" then
+        vim.opt.clipboard = "unnamedplus"
+      end
+    end
+  end,
+  desc = "ssh: 启用 unnamedplus(OSC52)",
+})
+
 -- 注册 gtags 索引模块的 autocmd/命令(打开新工作区自动检测/后台建库)
 pcall(require, "aivim.index")

@@ -83,6 +83,26 @@ opt.signcolumn = "yes"
 opt.splitright = true
 opt.splitbelow = true
 
+
+-- 剪贴板: SSH 场景优先用 OSC52(把内容发回本地终端,由本地 WezTerm/终端写入剪贴板)
+-- 本机有 xclip/xsel/wl-copy 时也一并启用 + 寄存器
+if vim.env.SSH_TTY or vim.env.SSH_CONNECTION then
+  opt.clipboard = "unnamedplus"
+  vim.g.clipboard = {
+    name = "OSC 52",
+    copy = {
+      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    },
+    paste = {
+      ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+      ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+    },
+  }
+else
+  opt.clipboard = "unnamedplus"
+end
+
 -- 说明:
 --  * vimrc 的 pastetoggle 在 Neovim 已移除;用 ;sp 映射 :set invpaste 代替。
 --  * vimrc 的 tags=./.tags;,.tags 不再使用:跳定义由 gtags tagfunc 接管。
