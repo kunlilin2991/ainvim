@@ -51,7 +51,8 @@ map("n", "[b", "<cmd>bp<cr>", { desc = "上一个 buffer" })
 map("n", "]b", "<cmd>bn<cr>", { desc = "下一个 buffer" })
 
 -- ── 文件树/文件查找/头源切换(vimrc: ;n / ;f / ;a)
-map("n", "<leader>n", "<cmd>Neotree toggle<cr>", { desc = "文件树" })
+-- ── 文件树(vimrc: <leader>n → NERDTree,支持 .. 上级/o 展开/t 新标签/i s 分屏/m 书签)
+map("n", "<leader>n", "<cmd>NERDTreeToggle<cr>", { desc = "文件树(NERDTree)" })
 map("n", "<leader>f", function()
   local ok, pick = pcall(function()
     return LazyVim.pick("files")
@@ -91,8 +92,8 @@ map("n", "<F8>", "<cmd>IndentLinesToggle<cr>", { desc = "缩进线" })
 map("n", "<C-k>", "<Plug>(ale_previous_wrap)", { remap = true, desc = "上一个错误" })
 map("n", "<C-j>", "<Plug>(ale_next_wrap)", { remap = true, desc = "下一个错误" })
 
--- ── easymotion: 小写=向后, 大写=向前
--- 直接 feed <Plug>,不加 remap,避免 leader(;) 前缀解析干扰
+-- ── easymotion: 与原始 Vim/easymotion 一致
+-- 小写 = 向前(行数增大方向,同 w/f),大写 = 向后(同 b/F)
 local function em(plug)
   return function()
     vim.api.nvim_feedkeys(
@@ -103,10 +104,10 @@ local function em(plug)
   end
 end
 
-map({ "n", "x", "o" }, "<leader><leader>w", em("easymotion-b"), { desc = "easymotion 词首(向后)" })
-map({ "n", "x", "o" }, "<leader><leader>W", em("easymotion-w"), { desc = "easymotion 词首(向前)" })
-map({ "n", "x", "o" }, "<leader><leader>f", em("easymotion-F"), { desc = "easymotion 字符(向后)" })
-map({ "n", "x", "o" }, "<leader><leader>F", em("easymotion-f"), { desc = "easymotion 字符(向前)" })
+map({ "n", "x", "o" }, "<leader><leader>w", em("easymotion-w"), { desc = "easymotion 词首(向前/下)" })
+map({ "n", "x", "o" }, "<leader><leader>W", em("easymotion-b"), { desc = "easymotion 词首(向后/上)" })
+map({ "n", "x", "o" }, "<leader><leader>f", em("easymotion-f"), { desc = "easymotion 字符(向前/下)" })
+map({ "n", "x", "o" }, "<leader><leader>F", em("easymotion-F"), { desc = "easymotion 字符(向后/上)" })
 
 -- ── 索引查询(vimrc: gutentags_plus 的 ;g* / ;j*)
 local function idx()

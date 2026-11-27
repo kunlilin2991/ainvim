@@ -32,6 +32,31 @@ return {
     lazy = false,
   },
 
+  -- NERDTree(vimrc: <leader>n;支持 .. 上级、子目录展开、书签)
+  {
+    "preservim/nerdtree",
+    cmd = { "NERDTreeToggle", "NERDTree", "NERDTreeFind" },
+    init = function()
+      vim.g.NERDTreeShowHidden = 0
+      vim.g.NERDTreeWinSize = 48
+      vim.g.NERDTreeMinimalUI = 1
+      vim.g.NERDTreeDirArrows = 1
+      vim.g.NERDTreeAutoDeleteBuffer = 1
+      vim.g.NERDTreeHighlightCursorline = 1
+      vim.g.NERDTreeIgnore = { '\\.pyc$', '\\.pyo$', '\\.obj$', '\\.o$', '\\.so$', '\\.egg$', '^\\.git$', '^\\.svn$', '^\\.hg$' }
+      -- 关闭 NERDTree 时若只剩它一个窗口则退出
+      vim.api.nvim_create_autocmd("BufEnter", {
+        callback = function()
+          if vim.fn.winnr("$") == 1
+            and vim.bo.buftype == ""
+            and vim.bo.filetype == "nerdtree" then
+            vim.cmd("quit")
+          end
+        end,
+      })
+    end,
+  },
+
   -- a.vim(vimrc: ;a 头/源切换)
   {
     "vim-scripts/a.vim",

@@ -42,7 +42,7 @@ Leader 为 **`;`**，localleader 为 **`\`**。以下 `<leader>` 即 `;`。
 
 | 键位 | 作用 |
 |---|---|
-| `;n` | 文件树（Neo-tree toggle） |
+| `;n` | 文件树（NERDTree：`u` 上级、`o` 展开、`t` 新标签、`i`/`s` 分屏、`m` 书签） |
 | `;f` | 模糊查找文件（LazyVim picker） |
 | `;a` | 头文件 / 源文件切换（a.vim `:A`） |
 | `F9` / `;tb` | 结构大纲（Aerial，treesitter） |
@@ -81,10 +81,10 @@ Leader 为 **`;`**，localleader 为 **`\`**。以下 `<leader>` 即 `;`。
 
 | 键位 | 作用 | 模式 |
 |---|---|---|
-| `<leader><leader>w` | 词首跳转（**向后**，双字符标签） | n/x/o |
-| `<leader><leader>W` | 词首跳转（**向前**） | n/x/o |
-| `<leader><leader>f` | 字符跳转（**向后**，输入字符后出标签） | n/x/o |
-| `<leader><leader>F` | 字符跳转（**向前**） | n/x/o |
+| `<leader><leader>w` | 词首跳转（**向前/下**，同 `w`） | n/x/o |
+| `<leader><leader>W` | 词首跳转（**向后/上**，同 `b`） | n/x/o |
+| `<leader><leader>f` | 字符跳转（**向前/下**，同 `f`） | n/x/o |
+| `<leader><leader>F` | 字符跳转（**向后/上**，同 `F`） | n/x/o |
 
 ## 六、编辑增强
 
