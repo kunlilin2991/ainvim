@@ -196,28 +196,34 @@ return {
         end,
       },
     },
+    config = function(_, opts)
+      require("agentic").setup(opts)
+      -- 注册全局 F2/F3/F4(不依赖先打开终端)
+      require("aivim.agent_term").setup_keys()
+    end,
     keys = {
       -- ── 终端 agent(推荐): 普通 shell + CLI,不经 ACP/MCP ──
+      -- ── 终端 agent: 双 leader 前缀(;;)，避开 ;;w/;;W/;;f/;;F ──
       {
-        "<leader>it",
+        "<leader><leader>a",
         function() require("aivim.agent_term").toggle() end,
         mode = { "n", "t" },
         desc = "切换 agent 终端(claude/codex)",
       },
       {
-        "<leader>if",
+        "<leader><leader>s",
         function() require("aivim.agent_term").forward() end,
         mode = { "n", "x" },
         desc = "上下文打进 agent 终端(不提交)",
       },
       {
-        "<leader>iP",
+        "<leader><leader>p",
         function() require("aivim.agent_term").forward_path() end,
         mode = { "n", "x" },
         desc = "只发路径+行号到 agent 终端",
       },
       {
-        "<leader>iq",
+        "<leader><leader>q",
         function() require("aivim.agent_term").close() end,
         mode = { "n", "t" },
         desc = "关闭 agent 终端",
@@ -226,26 +232,26 @@ return {
       -- ── 快速解释(直连 API,不产生 agent 工具调用) ──
 
       -- ── ACP 面板(agentic.nvim) ──
-      { "<leader>iT", function() require("agentic").toggle() end, mode = { "n", "v", "i" }, desc = "Agentic 面板(ACP)" },
-      { "<leader>ip", function() require("agentic").new_session_with_provider() end, desc = "选择 provider" },
-      { "<leader>iR", function() require("agentic").new_session() end, desc = "新会话" },
-      { "<leader>ir", function() require("agentic").restore_session() end, desc = "恢复会话" },
-      { "<leader>is", function() require("agentic").add_selection() end, mode = "x", desc = "发送选区" },
-      { "<leader>ib", function() require("agentic").add_file() end, desc = "加入当前文件" },
-      { "<leader>ia", add_current_function, desc = "加入当前函数" },
-      { "<leader>iS", function() require("agentic").stop_generation() end, desc = "停止生成" },
+      { "<leader><leader>A", function() require("agentic").toggle() end, mode = { "n", "v", "i" }, desc = "Agentic 面板(ACP)" },
+      { "<leader><leader>P", function() require("agentic").new_session_with_provider() end, desc = "选择 provider" },
+      { "<leader><leader>N", function() require("agentic").new_session() end, desc = "新会话" },
+      { "<leader><leader>r", function() require("agentic").restore_session() end, desc = "恢复会话" },
+      { "<leader><leader>v", function() require("agentic").add_selection() end, mode = "x", desc = "发送选区" },
+      { "<leader><leader>b", function() require("agentic").add_file() end, desc = "加入当前文件" },
+      { "<leader><leader>g", add_current_function, desc = "加入当前函数" },
+      { "<leader><leader>X", function() require("agentic").stop_generation() end, desc = "停止生成" },
       {
-        "<leader>i?",
+        "<leader><leader>?",
         function()
           vim.notify(
             table.concat({
-              ";it       切换 agent 终端(claude/codex)",
-              ";iq       关闭 agent 终端",
-              ";if       选区/当前行(含代码)打进终端, 不提交",
-              ";iP       只发 路径+行号, 不附代码",
-              ";iT       Agentic 面板(ACP)   ;ip 选 provider",
-              ";is/;ib/;ia  发送选区/加文件/加函数   ;iS 停止",
-              ";ir       恢复会话",
+              ";;a      切换 agent 终端(claude/codex)",
+              ";;q      关闭 agent 终端",
+              ";;s      选区/当前行(含代码)打进终端, 不提交",
+              ";;p      只发 路径+行号, 不附代码",
+              ";;A       Agentic 面板(ACP)   ;;P 选 provider",
+              ";;v/;;b/;;g  发送选区/加文件/加函数   ;;X 停止",
+              ";;r       恢复会话   ;;N 新会话",
             }, "\n"),
             vim.log.levels.INFO
           )

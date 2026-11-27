@@ -97,25 +97,32 @@ Leader 为 **`;`**，localleader 为 **`\`**。以下 `<leader>` 即 `;`。
 | `<Enter>` | 对齐（EasyAlign） | x |
 | `<C-k>` / `<C-j>` | 上一个 / 下一个 ALE 错误 | n |
 
-## 七、AI / Agent（前缀 `;i`）
+## 七、AI / Agent（前缀 `;;`）
+
+双 leader 前缀 `;;`，与 easymotion 的 `;;w/;;W/;;f/;;F` 不冲突。
+
+### 终端 agent（推荐）
 
 | 键位 | 作用 |
 |---|---|
-| `;it` / `;ic` | 打开/切换 Agent 面板（默认 Claude） |
-| `;iP` | 选择 provider（Claude / Codex / Gemini / OpenCode） |
-| `;iR` | 新会话 |
-| `;ir` | 恢复会话 |
-| `;is` | 发送可视选区（visual） |
-| `;ib` | 当前文件加入上下文（Referenced Files） |
-| `;ia` | 当前函数加入上下文（只带函数体） |
-| `;ie` | 解释当前函数（自动提问，只带函数体） |
-| `;iE` | 解析当前文件（自动提问，不塞整个文件） |
-| `;ix` | 解释选中代码（visual，自动提问，>800 行会拦截） |
-| `;id` | 当前 buffer 诊断加入上下文 |
-| `;iS` | 停止生成 |
-| `;i?` | AI 键位帮助 |
+| `;;a` | 打开/切换 agent 终端（claude） |
+| `;;s` | 把选区/当前行（含代码）打进终端，不提交 |
+| `;;p` | 只发路径+行号，不附代码 |
+| `;;q` | 关闭 agent 终端 |
 
-面板内：`\s` 切 provider、`\m` 切 model、`\l` 会话列表、`]c`/`[c` 跳 diff。
+### ACP 面板（agentic.nvim）
+
+| 键位 | 作用 |
+|---|---|
+| `;;A` | Agentic 面板 |
+| `;;P` | 选择 provider |
+| `;;N` | 新会话 |
+| `;;r` | 恢复会话 |
+| `;;v` | 发送选区（visual） |
+| `;;b` | 加入当前文件 |
+| `;;g` | 加入当前函数 |
+| `;;X` | 停止生成 |
+| `;;?` | AI 键位帮助 |
 
 ## 八、补全（blink.cmp）
 

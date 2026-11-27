@@ -86,33 +86,6 @@ function M.open(opts)
   vim.keymap.set("t", "<C-q>", function()
     vim.cmd("hide")
   end, { buffer = buf, desc = "隐藏 agent 终端" })
-  -- Terminal-Job 模式不解析 <C-w>x 多键前缀,Esc 又属于 agent TUI。
-  -- 只用三个 F 键:
-  --   <F2> 打开/切到终端并送上下文(等价 ;it + ;if)
-  --   <F3> 窗口循环
-  --   <F4> 关闭终端
-  vim.keymap.set("t", "<F2>", function()
-    -- 在终端里按 F2 = 把上下文送进当前终端
-    M.forward()
-  end, { buffer = buf, desc = "送上下文到终端" })
-  vim.keymap.set("t", "<F3>", "<C-\\><C-n><C-w>w", {
-    buffer = buf,
-    remap = true,
-    desc = "窗口循环",
-  })
-  vim.keymap.set("t", "<F4>", function()
-    vim.cmd("hide")
-  end, { buffer = buf, desc = "关闭终端" })
-
-  -- normal 模式下全局可用
-  vim.keymap.set("n", "<F2>", function()
-    M.forward()
-  end, { desc = "打开终端并送上下文" })
-  vim.keymap.set("n", "<F3>", "<C-w>w", { remap = true, desc = "窗口循环" })
-  vim.keymap.set("n", "<F4>", function()
-    M.close()
-  end, { desc = "关闭终端" })
-
   entry = { buf = buf, job = job, tab = tab }
   terms[tab] = entry
   -- 隐藏终端时不要退出插入模式
@@ -307,5 +280,9 @@ end
 function M.focus()
   M.open()
 end
+
+--- 兼容占位:键位改到 ;; 前缀后不再注册 F 键
+--- (某些终端/tmux 缺 t_k2 定义,<F2> 会被当成字面量)
+function M.setup_keys() end
 
 return M

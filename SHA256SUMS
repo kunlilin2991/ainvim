@@ -7,13 +7,13 @@ d6069e642f83aa3f2b02923dfa73372b3ab2085d75dd5199f50db9769829c925  ./bin/aivim
 778bb6da74b164f3c65349c0b49a747ed04b3606deb1916a65ecbb376f049fab  ./bin/nvim
 25cc263023969e7978538cc844ff8e1e22a733d0e7715f9248b6507862ce43a7  ./install.sh
 862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793  ./nvim-ai/.gitignore
-ff589671b084765d0823008bf66dd72ad02853c51957393bf32f4a8a4c7f259d  ./nvim-ai/KEYMAPS.md
+371ee5589f92985a69c421ab0b0d2254ac929053c5eabef5ec5e9242213838ec  ./nvim-ai/KEYMAPS.md
 720402c2e1dced53bb084da31fb1adf561384c72a0e4bc889d7a250a2bc3b5c5  ./nvim-ai/README.md
 4949ddf9b0e9f21ed0d32aa42fc62808b518c169ea1811fa2daa2163521bff5f  ./nvim-ai/docs/mcp.md
 cfb13d0eadb590967d4440c255d92ab8219b2bc7a6652612caf96a2d4e51429d  ./nvim-ai/init.lua
 70d5cb4684692d69a266dd2f44c3f4b8aa5da6a4eedf63748d572b8780cf9331  ./nvim-ai/lazy-lock.json
 c5e6e47a04e9afbf60e324cdbc6728357a63ef1eb10b68eb46539e57c02eb56b  ./nvim-ai/lazyvim.json
-2883c0d6119cf61fb60fa9d2c076341a7a6cd487a02f9c6864ac4ea977ae19c2  ./nvim-ai/lua/aivim/agent_term.lua
+c6d95581bc47e4016d4d3ab7db8fa8ec3ad18f17e8b97a13202b13adbef8b909  ./nvim-ai/lua/aivim/agent_term.lua
 70961a71523286e40d794cfdba2ff7837fe1dfb233d7474491f0b1a9180cbd4b  ./nvim-ai/lua/aivim/blink.lua
 804c9246709fda76b7f1865fd14528149f3adac85afff9030db590d82536e2a3  ./nvim-ai/lua/aivim/index.lua
 7ccedfd0a5fff7fdbca9af992fe00e718bacddbfc1d55a530c2f7d25d3b27857  ./nvim-ai/lua/aivim/workspace.lua
@@ -21,7 +21,7 @@ c5e6e47a04e9afbf60e324cdbc6728357a63ef1eb10b68eb46539e57c02eb56b  ./nvim-ai/lazy
 d3d70217dbaf2ea822bb17591def3c74f62e210505990561fc5eb448d0153b0f  ./nvim-ai/lua/config/keymaps.lua
 3f693a177127cca3b97992c6041a182ba520059671cf44c84964df9e221e26fe  ./nvim-ai/lua/config/lazy.lua
 0bb429f8c491809dae435c44b8507fdb3c8616ff2ed36908c16aa08c219f7467  ./nvim-ai/lua/config/options.lua
-6f00a10d3a95cc9bcd87e95bea7931929f46485d4003e4fb145edf2904dd31c5  ./nvim-ai/lua/plugins/ai.lua
+fc17d902072138bafb66f1ad1a6e749c78d840e02209f890f35eb36af805423a  ./nvim-ai/lua/plugins/ai.lua
 ec70d0833b0b4569f0a622794b276fd53aaaaf22e9b4b6f5dded11efaa3d55b1  ./nvim-ai/lua/plugins/bufferline.lua
 c9d2ace736ed75ec4c443ccad66f3541169ffd74fac77989174e181e75cbcad4  ./nvim-ai/lua/plugins/colorscheme.lua
 ccf0786b5528d0bd312af40706911d0c8bb567addcb81b07069b317d695085db  ./nvim-ai/lua/plugins/completion.lua
