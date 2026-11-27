@@ -27,7 +27,7 @@ e05f5f578eee2c84faa4bb0982a328ef6127d0198108f949e86164f8b1426297  ./nvim-ai/lua/
 ccf0786b5528d0bd312af40706911d0c8bb567addcb81b07069b317d695085db  ./nvim-ai/lua/plugins/completion.lua
 26115f8f837b19222d39e9167bc61d7f7a763b85e47e6e6ad1a05bc03b012ffc  ./nvim-ai/lua/plugins/editor.lua
 8fcb1c240a31f0ebe2b0666b9e7561ca91e09842472fabf75abc4d99c9411d90  ./nvim-ai/lua/plugins/lazyvim.lua
-313fc1559102a55fb261622faa047536e83ecbe913acb0ef7831624624a09e9e  ./nvim-ai/lua/plugins/legacy.lua
+8e576b8a2717ef8a59ea037ece7772216e474763058703352c951e4f3cc2f95c  ./nvim-ai/lua/plugins/legacy.lua
 5f55ed40c330dadecc68197e79ecb0081fb53127d5dfd1c2ce9fc8201fd705d9  ./nvim-ai/lua/plugins/lsp.lua
 5f645db5a1920a86b0789b55814c1d45d6951c3de5d4e9a39ea7b5c9ec2b4574  ./nvim-ai/lua/plugins/treesitter.lua
 a0f846940579b10d426ce0987345cbc08f7b993f0cc221f8bdf8fc9578f2628a  ./nvim-ai/scripts/bootstrap.sh

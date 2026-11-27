@@ -38,24 +38,27 @@ return {
     cmd = { "NERDTreeToggle", "NERDTree", "NERDTreeFind" },
     init = function()
       vim.g.NERDTreeShowHidden = 0
-      -- 宽度按当前终端宽度的一半计算(打开时动态更新)
-      vim.g.NERDTreeWinSize = math.max(20, math.floor(vim.o.columns / 2))
+      -- 宽度: 约 30% 宽度,夹在 20~40 列之间(竖屏/宽屏都不至于太占地方)
+      local function tree_width()
+        return math.max(20, math.min(40, math.floor(vim.o.columns * 0.3)))
+      end
+      vim.g.NERDTreeWinSize = tree_width()
       vim.g.NERDTreeMinimalUI = 1
       vim.g.NERDTreeDirArrows = 1
       vim.g.NERDTreeAutoDeleteBuffer = 1
       vim.g.NERDTreeHighlightCursorline = 1
       vim.g.NERDTreeIgnore = { '\\.pyc$', '\\.pyo$', '\\.obj$', '\\.o$', '\\.so$', '\\.egg$', '^\\.git$', '^\\.svn$', '^\\.hg$' }
-      vim.g.NERDTreeWinSizeMax = math.max(20, math.floor(vim.o.columns / 2))
+      vim.g.NERDTreeWinSizeMax = tree_width()
       -- 每次打开前按当前宽度重算,适配终端 resize
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "nerdtree",
         callback = function()
-          local half = math.max(20, math.floor(vim.o.columns / 2))
-          vim.g.NERDTreeWinSize = half
-          vim.g.NERDTreeWinSizeMax = half
+          local width = tree_width()
+          vim.g.NERDTreeWinSize = width
+          vim.g.NERDTreeWinSizeMax = width
           for _, win in ipairs(vim.api.nvim_list_wins()) do
             if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "nerdtree" then
-              pcall(vim.api.nvim_win_set_width, win, half)
+              pcall(vim.api.nvim_win_set_width, win, width)
             end
           end
         end,
