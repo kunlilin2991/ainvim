@@ -38,12 +38,29 @@ return {
     cmd = { "NERDTreeToggle", "NERDTree", "NERDTreeFind" },
     init = function()
       vim.g.NERDTreeShowHidden = 0
-      vim.g.NERDTreeWinSize = 48
+      -- 宽度按当前终端宽度的一半计算(打开时动态更新)
+      vim.g.NERDTreeWinSize = math.max(20, math.floor(vim.o.columns / 2))
       vim.g.NERDTreeMinimalUI = 1
       vim.g.NERDTreeDirArrows = 1
       vim.g.NERDTreeAutoDeleteBuffer = 1
       vim.g.NERDTreeHighlightCursorline = 1
       vim.g.NERDTreeIgnore = { '\\.pyc$', '\\.pyo$', '\\.obj$', '\\.o$', '\\.so$', '\\.egg$', '^\\.git$', '^\\.svn$', '^\\.hg$' }
+      vim.g.NERDTreeWinSizeMax = math.max(20, math.floor(vim.o.columns / 2))
+      -- 每次打开前按当前宽度重算,适配终端 resize
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "nerdtree",
+        callback = function()
+          local half = math.max(20, math.floor(vim.o.columns / 2))
+          vim.g.NERDTreeWinSize = half
+          vim.g.NERDTreeWinSizeMax = half
+          for _, win in ipairs(vim.api.nvim_list_wins()) do
+            if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "nerdtree" then
+              pcall(vim.api.nvim_win_set_width, win, half)
+            end
+          end
+        end,
+      })
+
       -- 关闭 NERDTree 时若只剩它一个窗口则退出
       vim.api.nvim_create_autocmd("BufEnter", {
         callback = function()
